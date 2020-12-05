@@ -55,3 +55,9 @@ button:hover {
 input:focus {
   outline: none;
 }
+
+.taskComplete {
+  background-color: wheat;
+  margin: 5px;
+  padding: 11px;
+}

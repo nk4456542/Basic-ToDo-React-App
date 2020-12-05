@@ -8,7 +8,7 @@ function App() {
   const inputTask = useRef(null);
 
   const addTask = () => {
-    if (!todoList.includes(currentTask) && currentTask !== "") {
+    if (!todoList.some((el) => { return el.task === currentTask }) && currentTask !== "") {
       setTodoList([...todoList, { task: currentTask, completed: false }]);
     }
     inputTask.current.value = "";
@@ -16,10 +16,20 @@ function App() {
   }
 
   const deleteTask = (taskToDelete) => {
-    setTodoList(todoList.filter((item) => {
-      return item.task !== taskToDelete;
+    setTodoList(todoList.filter((taskObject) => {
+      return taskObject.task !== taskToDelete;
     }));
-  }
+  };
+
+  const completeTask = (taskToComplete) => {
+    setTodoList(
+      todoList.map((taskObject) => {
+        return taskObject.task === taskToComplete
+          ? { task: taskToComplete, completed: true }
+          : { task: taskToComplete, completed: false }
+      })
+    );
+  };
 
   return (
     <div className="App">
@@ -46,15 +56,17 @@ function App() {
               return (
                 <div id="task" key={index}>
                   <li>{val.task}</li>
-                  <button>Completed</button>
+                  <button onClick={() => completeTask(val.task)}>Completed</button>
                   <button onClick={() => deleteTask(val.task)}>Delete</button>
-                  {
-                    val.completed ? (
-                      <h1 style={{ color: "white" }}>Task Completed</h1>
-                    ) : (
-                        <h1 style={{ color: "white" }}>Task Not Completed</h1>
-                      )
-                  }
+                  <div className="taskComplete">
+                    {
+                      val.completed ? (
+                        <span>Task Completed</span>
+                      ) : (
+                          <span>Task Not Completed</span>
+                        )
+                    }
+                  </div>
                 </div>
               )
             })
