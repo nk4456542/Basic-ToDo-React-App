@@ -26,7 +26,7 @@ function App() {
       todoList.map((taskObject) => {
         return taskObject.task === taskToComplete
           ? { task: taskToComplete, completed: true }
-          : { task: taskToComplete, completed: false }
+          : { task: taskObject.task, completed: false }
       })
     );
   };
