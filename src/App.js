@@ -26,7 +26,7 @@ function App() {
       todoList.map((taskObject) => {
         return taskObject.task === taskToComplete
           ? { task: taskToComplete, completed: true }
-          : { task: taskObject.task, completed: false }
+          : { task: taskObject.task, completed: taskObject.completed ? true : false }
       })
     );
   };
@@ -38,9 +38,9 @@ function App() {
         <input
           ref={inputTask}
           onChange={(event) => { return setCurrentTask(event.target.value) }}
-          onKeyPress={(event) => {
+          onKeyDown={(event) => {
             if (event.key === "Enter") {
-              return addTask();
+              addTask();
             }
           }}
           type="text"
@@ -56,16 +56,18 @@ function App() {
               return (
                 <div id="task" key={index}>
                   <li>{val.task}</li>
-                  <button onClick={() => completeTask(val.task)}>Completed</button>
-                  <button onClick={() => deleteTask(val.task)}>Delete</button>
-                  <div className="taskComplete">
-                    {
-                      val.completed ? (
-                        <span>Task Completed</span>
-                      ) : (
-                          <span>Task Not Completed</span>
-                        )
-                    }
+                  <div id="btns">
+                    <button onClick={() => completeTask(val.task)}>Completed</button>
+                    <button onClick={() => deleteTask(val.task)}>Delete</button>
+                    <div>
+                      {
+                        val.completed ? (
+                          <div className="taskComplete" style={{ backgroundColor: "#00df6c", color: "black" }}>Task Completed</div>
+                        ) : (
+                            <div className="taskComplete">Task Not Completed</div>
+                          )
+                      }
+                    </div>
                   </div>
                 </div>
               )
