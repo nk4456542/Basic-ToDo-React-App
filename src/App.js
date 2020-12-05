@@ -1,24 +1,67 @@
-import logo from './logo.svg';
+import React, { useRef, useState } from 'react';
 import './App.css';
 
 function App() {
+
+  const [todoList, setTodoList] = useState([]);
+  const [currentTask, setCurrentTask] = useState("");
+  const inputTask = useRef(null);
+
+  const addTask = () => {
+    if (!todoList.includes(currentTask) && currentTask !== "") {
+      setTodoList([...todoList, { task: currentTask, completed: false }]);
+    }
+    inputTask.current.value = "";
+    setCurrentTask("");
+  }
+
+  const deleteTask = (taskToDelete) => {
+    setTodoList(todoList.filter((item) => {
+      return item.task !== taskToDelete;
+    }));
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <h1 style={{ color: "wheat" }}>To-Do List</h1>
+      <div>
+        <input
+          ref={inputTask}
+          onChange={(event) => { return setCurrentTask(event.target.value) }}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              return addTask();
+            }
+          }}
+          type="text"
+          placeholder="Add Task..."
+        />
+        <button onClick={addTask}>Add Task</button>
+      </div>
+      <hr />
+      <div>
+        <ul>
+          {
+            todoList.map((val, index) => {
+              return (
+                <div id="task" key={index}>
+                  <li>{val.task}</li>
+                  <button>Completed</button>
+                  <button onClick={() => deleteTask(val.task)}>Delete</button>
+                  {
+                    val.completed ? (
+                      <h1 style={{ color: "white" }}>Task Completed</h1>
+                    ) : (
+                        <h1 style={{ color: "white" }}>Task Not Completed</h1>
+                      )
+                  }
+                </div>
+              )
+            })
+          }
+        </ul>
+      </div>
+    </div >
   );
 }
 
